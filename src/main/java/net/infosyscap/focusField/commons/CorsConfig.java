@@ -1,4 +1,4 @@
-package net.infosyscap.focusField.auth;
+package net.infosyscap.focusField.commons;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

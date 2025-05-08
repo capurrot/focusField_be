@@ -1,4 +1,4 @@
-package net.infosyscap.focusField.auth;
+package net.infosyscap.focusField.jwt;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

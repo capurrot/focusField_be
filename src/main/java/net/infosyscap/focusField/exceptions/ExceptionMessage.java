@@ -1,4 +1,4 @@
-package net.infosyscap.focusField.auth;
+package net.infosyscap.focusField.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

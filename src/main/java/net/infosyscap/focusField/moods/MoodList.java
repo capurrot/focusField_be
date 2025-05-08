@@ -37,4 +37,5 @@ public class MoodList {
 
     @Column(nullable = false)
     private String icon;
+
 }

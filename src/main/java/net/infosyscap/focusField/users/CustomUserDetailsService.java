@@ -1,4 +1,4 @@
-package net.infosyscap.focusField.auth;
+package net.infosyscap.focusField.users;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
