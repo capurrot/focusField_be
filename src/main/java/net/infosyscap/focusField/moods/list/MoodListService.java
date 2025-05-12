@@ -1,4 +1,4 @@
-package net.infosyscap.focusField.moods;
+package net.infosyscap.focusField.moods.list;
 
 import net.infosyscap.focusField.commons.CommonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,8 @@ import java.util.Optional;
 
 @Service
 public class MoodListService {
-    @Autowired MoodListRepository moodListRepository;
+    @Autowired
+    MoodListRepository moodListRepository;
 
     public List<MoodListDto> findAllMoodDtos() {
         return moodListRepository.findAllByOrderByIdAsc()
@@ -57,8 +58,16 @@ public class MoodListService {
 
 
     public CommonResponse saveMood(MoodList mood) {
-        moodListRepository.save(mood);
-        return new CommonResponse(moodListRepository.save(mood).getId());
+        if (mood.getTag() != null) {
+            mood.getTag().forEach(tag -> tag.setMood(mood));
+        }
+
+        if (mood.getColors() != null) {
+            mood.getColors().forEach(color -> color.setMood(mood));
+        }
+
+        MoodList saved = moodListRepository.save(mood);
+        return new CommonResponse(saved.getId());
     }
 
     public MoodList updateMood(Long id, MoodList mood) {

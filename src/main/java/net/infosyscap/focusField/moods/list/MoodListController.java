@@ -1,4 +1,4 @@
-package net.infosyscap.focusField.moods;
+package net.infosyscap.focusField.moods.list;
 
 import net.infosyscap.focusField.commons.CommonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/focus-field/moods")
 public class MoodListController {
-    @Autowired MoodListService moodListService;
+    @Autowired
+    MoodListService moodListService;
     // GET per trovare tutti i moods
     @GetMapping
     public ResponseEntity<List<MoodListDto>> getAllMoodsSimple() {

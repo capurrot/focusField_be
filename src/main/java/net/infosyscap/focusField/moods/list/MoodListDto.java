@@ -1,4 +1,4 @@
-package net.infosyscap.focusField.moods;
+package net.infosyscap.focusField.moods.list;
 
 import java.util.List;
 
