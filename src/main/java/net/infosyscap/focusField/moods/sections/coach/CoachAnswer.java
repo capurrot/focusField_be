@@ -18,6 +18,10 @@ public class CoachAnswer {
     private Long id;
 
     private String text;
-    private boolean correct;
+    private Boolean correct;
     private String feedback;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "step_id")
+    private CoachStep step;
 }

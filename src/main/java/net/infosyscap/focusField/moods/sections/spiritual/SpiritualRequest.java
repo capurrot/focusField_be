@@ -4,8 +4,9 @@ import lombok.Data;
 
 @Data
 public class SpiritualRequest {
-    private Long id;
-    private boolean enabled;
+    private Boolean enabled;
     private String type;
+    private String verse;
+    private String text;
 }
 

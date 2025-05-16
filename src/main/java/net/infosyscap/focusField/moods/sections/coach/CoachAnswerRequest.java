@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class CoachAnswerRequest {
     private String text;
-    private boolean correct;
+    private Boolean correct;
     private String feedback;
 }
 

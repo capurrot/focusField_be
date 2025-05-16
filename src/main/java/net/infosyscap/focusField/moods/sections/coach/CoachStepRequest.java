@@ -5,7 +5,6 @@ import java.util.List;
 
 @Data
 public class CoachStepRequest {
-    private Long id;
     private String situation;
     private List<CoachAnswerRequest> answers;
 }

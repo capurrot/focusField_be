@@ -74,13 +74,31 @@ public class MoodListService {
         Optional<MoodList> moodList = moodListRepository.findById(id);
         if (moodList.isPresent()) {
             MoodList existingMood = moodList.get();
+
             existingMood.setSlug(mood.getSlug());
             existingMood.setImage(mood.getImage());
             existingMood.setBackground(mood.getBackground());
-            existingMood.setTag(mood.getTag());
-            existingMood.setColors(mood.getColors());
             existingMood.setOpacity(mood.getOpacity());
             existingMood.setIcon(mood.getIcon());
+
+
+            existingMood.getTag().clear();
+            if (mood.getTag() != null) {
+                for (MoodTags tag : mood.getTag()) {
+                    tag.setMood(existingMood);
+                    existingMood.getTag().add(tag);
+                }
+            }
+
+
+            existingMood.getColors().clear();
+            if (mood.getColors() != null) {
+                for (MoodColors color : mood.getColors()) {
+                    color.setMood(existingMood);
+                    existingMood.getColors().add(color);
+                }
+            }
+
             return moodListRepository.save(existingMood);
         } else {
             return null;

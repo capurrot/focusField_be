@@ -4,7 +4,8 @@ import lombok.Data;
 
 @Data
 public class CtaRequest {
-    private Long id;
+    private String actionCta;
     private String text;
+
 }
 

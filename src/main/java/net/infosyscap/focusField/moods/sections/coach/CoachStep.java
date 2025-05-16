@@ -20,4 +20,9 @@ public class CoachStep {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CoachAnswer> answers;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "coach_id")
+    private Coach coach;
+
 }

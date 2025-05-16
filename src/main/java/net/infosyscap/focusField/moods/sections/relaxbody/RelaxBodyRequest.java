@@ -5,8 +5,7 @@ import java.util.List;
 
 @Data
 public class RelaxBodyRequest {
-    private Long id;
-    private boolean enabled;
+    private Boolean enabled;
     private String title;
     private String description;
     private String start;

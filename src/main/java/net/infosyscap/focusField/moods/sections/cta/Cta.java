@@ -15,5 +15,7 @@ public class Cta {
     private Long id;
 
     private String text;
-    private String action;
+
+    @Column(name = "action_cta")
+    private String actionCta;
 }

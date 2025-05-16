@@ -1,8 +1,10 @@
 package net.infosyscap.focusField.moods.single;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import net.infosyscap.focusField.moods.list.MoodListRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -11,18 +13,28 @@ import org.springframework.web.bind.annotation.*;
 public class MoodController {
 
     private final MoodService moodService;
-    private final MoodListRepository moodListRepository;
-
-    @PostMapping
-    public ResponseEntity<Mood> createMood(@RequestBody MoodRequest moodRequest) {
-        Mood mood = MoodMapper.fromRequest(moodRequest, moodListRepository);
-        Mood savedMood = moodService.saveMood(mood);
-        return ResponseEntity.ok(savedMood);
-    }
 
     @GetMapping("/{slug}/{lang}")
-    public ResponseEntity<Mood> getMoodBySlugAndLang(@PathVariable String slug, @PathVariable String lang) {
+    public ResponseEntity<MoodResponse> getMoodBySlugAndLang(@PathVariable String slug, @PathVariable String lang) {
         Mood mood = moodService.getMoodBySlugAndLang(slug, lang);
-        return ResponseEntity.ok(mood);
+        MoodResponse response = MoodMapper.toResponse(mood);
+        return ResponseEntity.ok(response);
     }
+
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(HttpStatus.CREATED)
+    public MoodResponse saveMood(@RequestBody MoodRequest moodRequest) {
+        Mood savedMood = moodService.saveMood(moodRequest);
+        return MoodMapper.toResponse(savedMood);
+    }
+
+    @PutMapping("/{slug}/{lang}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public Mood updateMood(@PathVariable String slug, @PathVariable String lang, @RequestBody MoodRequest moodRequest) {
+        return moodService.updateMood(slug, lang, moodRequest);
+    }
+
 }
+

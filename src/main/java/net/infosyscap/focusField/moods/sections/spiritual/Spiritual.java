@@ -14,7 +14,7 @@ public class Spiritual {
     @SequenceGenerator(name = "spiritual_seq", sequenceName = "spiritual_id_seq", allocationSize = 1)
     private Long id;
 
-    private boolean enabled;
+    private Boolean enabled;
     private String type;
     private String verse;
 

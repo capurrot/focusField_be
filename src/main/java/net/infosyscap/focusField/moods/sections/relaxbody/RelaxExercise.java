@@ -21,4 +21,8 @@ public class RelaxExercise {
 
     private String duration;
     private String image;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "relax_body_id")
+    private RelaxBody relaxBody;
 }

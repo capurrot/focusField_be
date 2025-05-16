@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class RelaxExerciseRequest {
-    private Long id;
     private String name;
     private String instructions;
     private String duration;

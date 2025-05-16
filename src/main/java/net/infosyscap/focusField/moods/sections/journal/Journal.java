@@ -14,10 +14,10 @@ public class Journal {
     @SequenceGenerator(name = "journal_seq", sequenceName = "journal_id_seq", allocationSize = 1)
     private Long id;
 
-    private boolean enabled;
+    private Boolean enabled;
     @Column(length = 1000)
     private String prompt;
     private String placeholder;
     private String save;
-    private boolean optional;
+    private Boolean optional;
 }

@@ -13,14 +13,12 @@ import net.infosyscap.focusField.moods.sections.spiritual.SpiritualRequest;
 
 @Data
 public class MoodRequest {
-    private Long id;
     private String slug;
     private String lang;
     private String name;
     private String description;
     private String imagine;
     private String helpYou;
-
     private MusicRequest music;
     private BreathingRequest breathing;
     private RelaxBodyRequest relaxBody;
@@ -31,8 +29,6 @@ public class MoodRequest {
     private CoachRequest coach;
     private CtaRequest cta;
     private MoodModalRequest moodModal;
-
     private String durationSuggestion;
-
     private Long moodListId;
 }

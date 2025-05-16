@@ -17,23 +17,16 @@ public class Breathing {
     @SequenceGenerator(name = "breathing_seq", sequenceName = "breathing_id_seq", allocationSize = 1)
     private Long id;
 
-    private boolean enabled;
+    private Boolean enabled;
     private String techniqueLabel;
     private String technique;
-    private String inBreath;
-    private String hold;
-    private String outBreath;
     private String rounds;
-    private String durationLabel;
-    private int duration;
+    private String totalDurationLabel;
+    private int totalDuration;
     private String scope;
     private String start;
     private String stop;
 
-
-    @ElementCollection
-    private List<String> instructions;
-
-    @ElementCollection
-    private Map<String, Integer> phases;
+    @OneToMany(mappedBy = "breathing", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BreathingPhases> phases;
 }

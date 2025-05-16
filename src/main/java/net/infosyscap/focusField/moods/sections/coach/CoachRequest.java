@@ -5,8 +5,7 @@ import java.util.List;
 
 @Data
 public class CoachRequest {
-    private Long id;
-    private boolean enabled;
+    private Boolean enabled;
 
     private String intro;
     private String obstacle;

@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class MoodModal {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mood_modal_seq")
     @SequenceGenerator(name = "mood_modal_seq", sequenceName = "mood_modal_id_seq", allocationSize = 1)
@@ -21,18 +22,23 @@ public class MoodModal {
     private String loading;
     private String notFound;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "info_modal_id")
     private InfoModal infoModal;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private CtaModal cta;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "cta_modal_id")
+    private CtaModal ctaModal;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "modal_title_id")
     private ModalTitle title;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "modal_desc_id")
     private ModalDesc desc;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "mood_sections_id")
     private MoodSections sections;
 }

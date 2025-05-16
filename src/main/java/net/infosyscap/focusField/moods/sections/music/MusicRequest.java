@@ -5,7 +5,6 @@ import java.util.List;
 
 @Data
 public class MusicRequest {
-    private Long id;
     private String title;
     private String playlistUrl;
     private List<String> tags;

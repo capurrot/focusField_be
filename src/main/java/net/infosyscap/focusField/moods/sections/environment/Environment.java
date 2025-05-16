@@ -15,7 +15,7 @@ public class Environment {
     @SequenceGenerator(name = "environment_seq", sequenceName = "environment_id_seq", allocationSize = 1)
     private Long id;
 
-    private boolean enabled;
+    private Boolean enabled;
 
     private String backgroundImage;
     private String backgroundVideo;

@@ -16,7 +16,7 @@ public class Coach {
     @SequenceGenerator(name = "coach_seq", sequenceName = "coach_id_seq", allocationSize = 1)
     private Long id;
 
-    private boolean enabled;
+    private Boolean enabled;
 
     @Column(length = 1000)
     private String intro;
@@ -32,4 +32,5 @@ public class Coach {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<CoachStep> steps;
+
 }

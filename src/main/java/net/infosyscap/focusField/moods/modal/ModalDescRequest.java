@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class ModalDescRequest {
-    private Long id;
     private String calm;
 }
 

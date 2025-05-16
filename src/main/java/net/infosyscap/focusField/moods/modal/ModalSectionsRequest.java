@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class ModalSectionsRequest {
-    private Long id;
     private String music;
     private String goals;
     private String preJournal;

@@ -5,8 +5,7 @@ import java.util.List;
 
 @Data
 public class EnvironmentRequest {
-    private Long id;
-    private boolean enabled;
+    private Boolean enabled;
 
     private String backgroundImage;
     private String backgroundVideo;
