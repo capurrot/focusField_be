@@ -55,6 +55,10 @@ public class AppUser implements UserDetails {
     private String googleId;
     private String pictureUrl;
 
+    private String verificationCode;
+    private boolean verified;
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()

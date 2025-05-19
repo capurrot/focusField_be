@@ -15,8 +15,8 @@ public class EmailController {
     EmailService emailService;
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void sendEmail(@RequestBody EmailRequest request) throws MessagingException {
-        emailService.sendEmail(request.getTo(), request.getSubject(), request.getBody());
+    public void sendEmail(@RequestBody EmailRegistrationRequest request) throws MessagingException {
+        emailService.sendRegistrationEmail(request.getTo(), request.getSubject(), request.getCode(), request.getLink());
     }
 }
 

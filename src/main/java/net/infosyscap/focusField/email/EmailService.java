@@ -8,24 +8,49 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
 @Service
 public class EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendEmail(String to, String subject, String body) throws MessagingException {
+    public void sendRegistrationEmail(String to, String subject, String code, String link) throws MessagingException {
+        String html = loadTemplate("templates/registration-email.html")
+                .replace("{{CODE}}", code)
+                .replace("{{LINK}}", link);
+
+        sendHtml(to, subject, html);
+    }
+
+    public void sendHtml(String to, String subject, String htmlContent) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-        // Splitta la stringa "to" usando virgola o punto e virgola come delimitatori
-        String[] recipients = to.split("\\s*[,;]\\s*");
-        helper.setTo(recipients);
-
+        helper.setTo(to);
         helper.setSubject(subject);
-        helper.setText(body, true);
+        helper.setText(htmlContent, true); // true = HTML
+
+        // Puoi cambiare il mittente o lasciarlo prendere da application.properties
+        helper.setFrom("noreply@infosyscap.net");
+
         mailSender.send(message);
-        System.out.println("Email inviata con successo a " + to);
+        System.out.println("Email HTML inviata con successo a " + to);
+    }
+
+
+    private String loadTemplate(String path) {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(path)) {
+            if (inputStream == null) {
+                throw new IllegalArgumentException("Template non trovato: " + path);
+            }
+            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException("Errore nella lettura del template: " + path, e);
+        }
     }
 
     public void sendEmailWithAttachment(String to, String subject, String body, byte[] attachmentBytes, String attachmentName) throws MessagingException {
