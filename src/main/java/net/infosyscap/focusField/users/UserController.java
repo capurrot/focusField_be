@@ -18,5 +18,15 @@ public class UserController {
     public java.util.List<AppUser> getAllUsers() {
         return userService.getAllUsers();
     }
+
+    @GetMapping("username")
+    public boolean getUserByUsername(String username) {
+        return userService.existsByUsername(username);
+    }
+    @GetMapping("email")
+    public boolean getUserByEmail(String email) {
+        return userService.existsByEmail(email);
+    }
+
 }
 

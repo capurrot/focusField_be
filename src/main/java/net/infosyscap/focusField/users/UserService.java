@@ -11,4 +11,11 @@ public class UserService {
     public <List> java.util.List<AppUser> getAllUsers() {
         return userRepository.findAll();
     }
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
 }
