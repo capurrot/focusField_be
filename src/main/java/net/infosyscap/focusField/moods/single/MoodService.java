@@ -105,6 +105,26 @@ public class MoodService {
                 .optional(moodRequest.getJournalPre().getOptional())
                 .build();
 
+        Journal journalGoals = null;
+        if (moodRequest.getJournalGoals() != null) {
+            journalGoals = Journal.builder()
+                    .enabled(moodRequest.getJournalGoals().getEnabled())
+                    .prompt(moodRequest.getJournalGoals().getPrompt())
+                    .placeholder(moodRequest.getJournalGoals().getPlaceholder())
+                    .save(moodRequest.getJournalGoals().getSave())
+                    .optional(moodRequest.getJournalGoals().getOptional())
+                    .goalLabel(moodRequest.getJournalGoals().getGoalLabel())
+                    .goals(moodRequest.getJournalGoals().getGoals() != null
+                            ? moodRequest.getJournalGoals().getGoals().stream()
+                            .map(goal -> JournalGoal.builder()
+                                    .goal(goal.getGoal())
+                                    .how(goal.getHow())
+                                    .build())
+                            .toList()
+                            : List.of())
+                    .build();
+        }
+
         Journal journalPost = Journal.builder()
                 .enabled(moodRequest.getJournalPost().getEnabled())
                 .prompt(moodRequest.getJournalPost().getPrompt())
@@ -239,6 +259,7 @@ public class MoodService {
                 .breathing(breathing)
                 .relaxBody(relaxBody)
                 .journalPre(journalPre)
+                .journalGoals(journalGoals)
                 .journalPost(journalPost)
                 .spiritual(spiritual)
                 .environment(environment)

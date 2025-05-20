@@ -16,6 +16,7 @@ import net.infosyscap.focusField.moods.sections.relaxbody.RelaxBodyResponse;
 import net.infosyscap.focusField.moods.sections.relaxbody.RelaxExerciseResponse;
 import net.infosyscap.focusField.moods.sections.spiritual.SpiritualResponse;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -98,23 +99,30 @@ public class MoodMapper {
                         .save(mood.getJournalPost().getSave())
                         .optional(mood.getJournalPost().getOptional())
                         .build())
-                .journalGoals(JournalResponse.builder()
-                        .id(mood.getJournalGoals().getId())
-                        .enabled(mood.getJournalGoals().getEnabled())
-                        .prompt(mood.getJournalGoals().getPrompt())
-                        .placeholder(mood.getJournalGoals().getPlaceholder())
-                        .save(mood.getJournalGoals().getSave())
-                        .optional(mood.getJournalGoals().getOptional())
-                        .goalLabel(mood.getJournalGoals().getGoalLabel())
-                        .goals(
-                                mood.getJournalGoals().getGoals().stream()
-                                        .map(goal -> JournalGoalResponse.builder()
-                                                .goal(goal.getGoal())
-                                                .how(goal.getHow())
-                                                .build())
-                                        .toList()
-                        )
-                        .build())
+                .journalGoals(
+                        mood.getJournalGoals() != null
+                                ? JournalResponse.builder()
+                                .id(mood.getJournalGoals().getId())
+                                .enabled(mood.getJournalGoals().getEnabled())
+                                .prompt(mood.getJournalGoals().getPrompt())
+                                .placeholder(mood.getJournalGoals().getPlaceholder())
+                                .save(mood.getJournalGoals().getSave())
+                                .optional(mood.getJournalGoals().getOptional())
+                                .goalLabel(mood.getJournalGoals().getGoalLabel())
+                                .goals(
+                                        mood.getJournalGoals().getGoals() != null
+                                                ? mood.getJournalGoals().getGoals().stream()
+                                                .map(goal -> JournalGoalResponse.builder()
+                                                        .goal(goal.getGoal())
+                                                        .how(goal.getHow())
+                                                        .build())
+                                                .toList()
+                                                : List.of()
+                                )
+                                .build()
+                                : null
+                )
+
                 .spiritual(SpiritualResponse.builder()
                         .id(mood.getSpiritual().getId())
                         .enabled(mood.getSpiritual().getEnabled())
