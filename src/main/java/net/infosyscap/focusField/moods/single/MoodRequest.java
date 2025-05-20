@@ -31,4 +31,5 @@ public class MoodRequest {
     private MoodModalRequest moodModal;
     private String durationSuggestion;
     private Long moodListId;
+    private JournalRequest journalGoals;
 }

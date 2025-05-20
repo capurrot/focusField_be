@@ -3,6 +3,8 @@ package net.infosyscap.focusField.moods.sections.journal;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -20,4 +22,10 @@ public class Journal {
     private String placeholder;
     private String save;
     private Boolean optional;
+
+
+    private String goalLabel; // Es. "Obiettivo n. {{index}}"
+
+    @OneToMany(mappedBy = "journal", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<JournalGoal> goals;
 }

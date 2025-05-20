@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -16,4 +18,7 @@ public class JournalResponse {
     private String placeholder;
     private String save;
     private Boolean optional;
+
+    private String goalLabel;
+    private List<JournalGoalResponse> goals;
 }

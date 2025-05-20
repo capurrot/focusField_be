@@ -39,6 +39,6 @@ public class MoodResponse {
     private MoodModalResponse moodModal;
     private String durationSuggestion;
     private Long moodListId;
-
+    private JournalResponse journalGoals;
 }
 

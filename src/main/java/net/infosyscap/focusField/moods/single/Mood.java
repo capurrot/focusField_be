@@ -71,4 +71,8 @@ public class Mood {
     @ManyToOne
     @JoinColumn(name = "mood_list_id")
     private MoodList moodList;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "journal_goals_id")
+    private Journal journalGoals;
 }

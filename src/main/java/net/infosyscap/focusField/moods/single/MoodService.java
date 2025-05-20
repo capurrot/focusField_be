@@ -15,6 +15,7 @@ import net.infosyscap.focusField.moods.sections.coach.CoachStepRepository;
 import net.infosyscap.focusField.moods.sections.cta.Cta;
 import net.infosyscap.focusField.moods.sections.environment.Environment;
 import net.infosyscap.focusField.moods.sections.journal.Journal;
+import net.infosyscap.focusField.moods.sections.journal.JournalGoal;
 import net.infosyscap.focusField.moods.sections.music.Music;
 import net.infosyscap.focusField.moods.sections.relaxbody.RelaxBody;
 import net.infosyscap.focusField.moods.sections.relaxbody.RelaxExercise;
@@ -342,6 +343,26 @@ public class MoodService {
                 .save(moodRequest.getJournalPost().getSave())
                 .optional(moodRequest.getJournalPost().getOptional())
                 .build();
+
+        List<JournalGoal> goalItems = moodRequest.getJournalGoals().getGoals().stream()
+                .map(req -> JournalGoal.builder()
+                        .goal(req.getGoal())
+                        .how(req.getHow())
+                        .build())
+                .toList();
+
+        Journal journalGoals = Journal.builder()
+                .id(existingMood.getJournalGoals() != null ? existingMood.getJournalGoals().getId() : null)
+                .enabled(moodRequest.getJournalGoals().getEnabled())
+                .prompt(moodRequest.getJournalGoals().getPrompt())
+                .placeholder(moodRequest.getJournalGoals().getPlaceholder())
+                .save(moodRequest.getJournalGoals().getSave())
+                .optional(moodRequest.getJournalGoals().getOptional())
+                .goalLabel(moodRequest.getJournalGoals().getGoalLabel())
+                .goals(goalItems)
+                .build();
+
+        goalItems.forEach(item -> item.setJournal(journalGoals));
 
         Spiritual spiritual = Spiritual.builder()
                 .id(existingMood.getSpiritual() != null ? existingMood.getSpiritual().getId() : null)

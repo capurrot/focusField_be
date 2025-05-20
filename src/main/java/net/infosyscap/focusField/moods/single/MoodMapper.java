@@ -9,6 +9,7 @@ import net.infosyscap.focusField.moods.sections.coach.CoachStep;
 import net.infosyscap.focusField.moods.sections.coach.CoachStepResponse;
 import net.infosyscap.focusField.moods.sections.cta.CtaResponse;
 import net.infosyscap.focusField.moods.sections.environment.EnvironmentResponse;
+import net.infosyscap.focusField.moods.sections.journal.JournalGoalResponse;
 import net.infosyscap.focusField.moods.sections.journal.JournalResponse;
 import net.infosyscap.focusField.moods.sections.music.MusicResponse;
 import net.infosyscap.focusField.moods.sections.relaxbody.RelaxBodyResponse;
@@ -96,6 +97,23 @@ public class MoodMapper {
                         .placeholder(mood.getJournalPost().getPlaceholder())
                         .save(mood.getJournalPost().getSave())
                         .optional(mood.getJournalPost().getOptional())
+                        .build())
+                .journalGoals(JournalResponse.builder()
+                        .id(mood.getJournalGoals().getId())
+                        .enabled(mood.getJournalGoals().getEnabled())
+                        .prompt(mood.getJournalGoals().getPrompt())
+                        .placeholder(mood.getJournalGoals().getPlaceholder())
+                        .save(mood.getJournalGoals().getSave())
+                        .optional(mood.getJournalGoals().getOptional())
+                        .goalLabel(mood.getJournalGoals().getGoalLabel())
+                        .goals(
+                                mood.getJournalGoals().getGoals().stream()
+                                        .map(goal -> JournalGoalResponse.builder()
+                                                .goal(goal.getGoal())
+                                                .how(goal.getHow())
+                                                .build())
+                                        .toList()
+                        )
                         .build())
                 .spiritual(SpiritualResponse.builder()
                         .id(mood.getSpiritual().getId())
