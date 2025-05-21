@@ -1,6 +1,9 @@
 package net.infosyscap.focusField.logs;
 
 import lombok.RequiredArgsConstructor;
+import net.infosyscap.focusField.users.AppUser;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
@@ -37,8 +40,20 @@ public class MoodLogController {
         return moodLogRepository.save(log);
     }
 
-    @GetMapping("/user/{userId}")
-    public List<MoodLog> getUserLogs(@PathVariable Long userId) {
-        return moodLogRepository.findByUserId(userId);
+    @GetMapping("/user/logs")
+    @PreAuthorize("isAuthenticated()")
+    public List<MoodLog> getAuthenticatedUserLogs(Authentication authentication) {
+        AppUser user = (AppUser) authentication.getPrincipal();
+
+        // Se ha il ruolo ADMIN, restituisci tutti i log
+        if (authentication.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
+            return moodLogRepository.findAll();
+        }
+
+        // Altrimenti restituisci solo i log dell'utente
+        return moodLogRepository.findByUserId(user.getId());
     }
+
+
+
 }
