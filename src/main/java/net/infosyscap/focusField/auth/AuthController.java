@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
@@ -111,4 +112,56 @@ public class AuthController {
 
         return ResponseEntity.ok(Map.of("token", jwt));
     }
+
+    @PostMapping("/facebook")
+    public ResponseEntity<?> loginWithFacebook(@RequestBody Map<String, String> request) {
+        String accessToken = request.get("accessToken");
+
+        if (accessToken == null || accessToken.isBlank()) {
+            return ResponseEntity.badRequest().body("AccessToken mancante");
+        }
+
+        try {
+            // Richiesta al Graph API di Facebook per ottenere dati utente
+            String url = "https://graph.facebook.com/me?fields=id,name,email,picture&access_token=" + accessToken;
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<Map> fbResponse = restTemplate.getForEntity(url, Map.class);
+
+            if (!fbResponse.getStatusCode().is2xxSuccessful()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("AccessToken non valido");
+            }
+
+            Map<String, Object> fbData = fbResponse.getBody();
+            String email = (String) fbData.get("email");
+            String name = (String) fbData.get("name");
+            String facebookId = (String) fbData.get("id");
+
+            if (email == null) {
+                return ResponseEntity.badRequest().body("Permesso email mancante. Accesso non consentito.");
+            }
+
+            // Divide il nome completo in nome e cognome
+            String[] names = name.split(" ", 2);
+            String nome = names.length > 0 ? names[0] : "";
+            String cognome = names.length > 1 ? names[1] : "";
+
+            // Crea o recupera l'utente Facebook
+            AppUser user = appUserService.findOrCreateUserByEmail(
+                    email,
+                    nome,
+                    cognome,
+                    null,
+                    facebookId,
+                    AuthProvider.FACEBOOK
+            );
+
+            String jwt = jwtTokenUtil.generateToken(user);
+
+            return ResponseEntity.ok(Map.of("token", jwt));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Errore durante la verifica del token Facebook");
+        }
+    }
+
 }
