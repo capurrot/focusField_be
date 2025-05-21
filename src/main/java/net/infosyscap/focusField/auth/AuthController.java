@@ -106,7 +106,7 @@ public class AuthController {
         String nome = googleUser.getFirstName();
         String cognome = googleUser.getLastName();
 
-        AppUser user = appUserService.findOrCreateUserByEmail(email, nome, cognome, googleUser.getPicture(), googleUser.getGoogleId());
+        AppUser user = appUserService.findOrCreateUserByEmail(email, nome, cognome, googleUser.getPicture(), googleUser.getGoogleId(), AuthProvider.GOOGLE );
         String jwt = jwtTokenUtil.generateToken(user);
 
         return ResponseEntity.ok(Map.of("token", jwt));

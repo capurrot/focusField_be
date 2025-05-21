@@ -7,16 +7,12 @@ import net.infosyscap.focusField.jwt.JwtTokenUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.Set;
-
 @Service
 @RequiredArgsConstructor
 public class AppUserService {
@@ -75,21 +71,37 @@ public class AppUserService {
     /**
      * Trova l'utente tramite email oppure lo crea (usato per login Google).
      */
-    public AppUser findOrCreateUserByEmail(String email, String nome, String cognome, String pictureUrl, String googleId) {
+    public AppUser findOrCreateUserByEmail(
+            String email,
+            String nome,
+            String cognome,
+            String pictureUrl,
+            String providerId,
+            AuthProvider provider
+    ) {
         return appUserRepository.findByEmail(email).orElseGet(() -> {
             AppUser newUser = new AppUser();
-            newUser.setUsername(email); // oppure una strategia unica
+            newUser.setUsername(email); // o una strategia alternativa
             newUser.setEmail(email);
             newUser.setNome(nome);
             newUser.setCognome(cognome);
-            newUser.setPassword(null);
+            newUser.setPassword(null); // oppure una password dummy se serve
             newUser.setRoles(Set.of(Role.ROLE_USER));
-            newUser.setGoogleAccount(true);
-            newUser.setGoogleId(googleId);
+            newUser.setVerified(true); // bypass verifica email
+            newUser.setProvider(provider);
+            newUser.setProviderId(providerId);
             newUser.setPictureUrl(pictureUrl);
-            newUser.setVerified(true);
+
+            // Flag per Google o Facebook
+            if (provider == AuthProvider.GOOGLE) {
+                newUser.setGoogleAccount(true);
+            } else if (provider == AuthProvider.FACEBOOK) {
+                newUser.setFacebookAccount(true);
+            }
+
             return appUserRepository.save(newUser);
         });
     }
+
 }
 

@@ -52,11 +52,19 @@ public class AppUser implements UserDetails {
     @Column(nullable = false)
     private boolean googleAccount = false;
 
+    @Column(nullable = false)
+    private boolean facebookAccount = false;
+
     private String googleId;
     private String pictureUrl;
 
     private String verificationCode;
     private boolean verified;
+
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
+
+    private String providerId;
 
 
     @Override
