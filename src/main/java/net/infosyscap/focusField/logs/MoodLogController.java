@@ -17,6 +17,14 @@ public class MoodLogController {
 
     private final MoodLogRepository moodLogRepository;
 
+    @GetMapping("/top-moods")
+    public List<MoodLogResponse> getTopMoods() {
+        return moodLogRepository.findTopMoodLogs()
+                .stream()
+                .limit(4)
+                .toList();
+    }
+
     @PostMapping("/start")
     public MoodLog startMoodLog(@RequestBody MoodLogStartRequest request) {
         MoodLog log = MoodLog.builder()
@@ -53,7 +61,4 @@ public class MoodLogController {
         // Altrimenti restituisci solo i log dell'utente
         return moodLogRepository.findByUserId(user.getId());
     }
-
-
-
 }
