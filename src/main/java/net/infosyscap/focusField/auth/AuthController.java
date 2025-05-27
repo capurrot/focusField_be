@@ -33,38 +33,49 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Map<String, String>> register(@RequestBody RegisterRequest registerRequest) throws MessagingException {
-        Set<Role> roles = new HashSet<>();
-        roles.add(Role.ROLE_USER);
+    public ResponseEntity<Map<String, String>> register(@RequestBody RegisterRequest registerRequest) {
+        try {
+            Set<Role> roles = new HashSet<>();
+            roles.add(Role.ROLE_USER);
 
-        AppUser newUser = appUserService.registerUser(
-                registerRequest.getUsername(),
-                registerRequest.getPassword(),
-                registerRequest.getEmail(),
-                registerRequest.getNome(),
-                registerRequest.getCognome(),
-                roles
-        );
+            // Genera codice di verifica PRIMA di creare l’utente
+            String verificationCode = UUID.randomUUID().toString();
 
-        // Genera codice di verifica
-        String verificationCode = UUID.randomUUID().toString();
-        appUserService.saveVerificationCode(newUser.getEmail(), verificationCode);
+            // Costruisci il link di verifica
+            String link = "http://192.168.178.111:8080/api/focus-field/auth/verify-email?code=" + verificationCode;
 
-        // Costruisci il link di verifica
-        String link = "http://192.168.178.111:8080/api/focus-field/auth/verify-email?code=" + verificationCode;
+            // Prova a inviare l'email PRIMA di creare l’utente
+            emailService.sendRegistrationEmail(
+                    registerRequest.getEmail(),
+                    "Verifica il tuo indirizzo email",
+                    verificationCode,
+                    link
+            );
 
-        // Invia email HTML da template
-        emailService.sendRegistrationEmail(
-                newUser.getEmail(),
-                "Verifica il tuo indirizzo email",
-                verificationCode,
-                link
-        );
+            // Se email inviata con successo, allora crea l’utente
+            AppUser newUser = appUserService.registerUser(
+                    registerRequest.getUsername(),
+                    registerRequest.getPassword(),
+                    registerRequest.getEmail(),
+                    registerRequest.getNome(),
+                    registerRequest.getCognome(),
+                    roles
+            );
 
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Registrazione avvenuta con successo. Controlla l’email per completare la verifica.");
-        return ResponseEntity.ok(response);
+            appUserService.saveVerificationCode(newUser.getEmail(), verificationCode);
+
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Registrazione avvenuta con successo. Controlla l’email per completare la verifica.");
+            return ResponseEntity.ok(response);
+
+        } catch (MessagingException e) {
+            // Log errore e ritorna errore personalizzato
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Errore durante l'invio dell'email di verifica. Riprova più tardi.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
     }
+
 
     @GetMapping("/verify-email")
     public ResponseEntity<String> verifyEmail(@RequestParam String code) {

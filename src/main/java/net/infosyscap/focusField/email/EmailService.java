@@ -35,7 +35,7 @@ public class EmailService {
         helper.setText(htmlContent, true); // true = HTML
 
         // Puoi cambiare il mittente o lasciarlo prendere da application.properties
-        helper.setFrom("noreply@infosyscap.net");
+        helper.setFrom("noreply@focusfield.it");
 
         mailSender.send(message);
         System.out.println("Email HTML inviata con successo a " + to);
