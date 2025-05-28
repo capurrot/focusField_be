@@ -19,7 +19,10 @@ public class BreathingModeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BreathingMode>> getAllModes() {
+    public ResponseEntity<List<BreathingMode>> getAllModes(@RequestParam(required = false) String lang) {
+        if (lang != null && !lang.isEmpty()) {
+            return ResponseEntity.ok(modeRepo.findByLang(lang));
+        }
         return ResponseEntity.ok(modeRepo.findAll());
     }
 }
