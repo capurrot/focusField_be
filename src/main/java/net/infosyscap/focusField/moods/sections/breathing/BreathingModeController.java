@@ -2,6 +2,7 @@ package net.infosyscap.focusField.moods.sections.breathing;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class BreathingModeController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<BreathingMode>> getAllModes(@RequestParam(required = false) String lang) {
         if (lang != null && !lang.isEmpty()) {
             return ResponseEntity.ok(modeRepo.findByLang(lang));
