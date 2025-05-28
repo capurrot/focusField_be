@@ -11,16 +11,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BreathingPhasesController {
 
-    private final BreathingPhasesRepository breathingPhasesRepository;
+    private final BreathingPhaseRepository breathingPhaseTemplateRepository;
 
     @GetMapping
-    public List<BreathingPhases> getAllBreathingPhases() {
-        return breathingPhasesRepository.findAll();
+    public List<BreathingPhaseTemplate> getAllBreathingPhaseTemplates() {
+        return breathingPhaseTemplateRepository.findAll();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BreathingPhases saveBreathingPhases(@RequestBody BreathingPhases breathingPhases) {
-        return breathingPhasesRepository.save(breathingPhases);
+    public BreathingPhaseTemplate saveBreathingPhaseTemplate(@RequestBody BreathingPhaseTemplate template) {
+        return breathingPhaseTemplateRepository.save(template);
     }
 }
+
