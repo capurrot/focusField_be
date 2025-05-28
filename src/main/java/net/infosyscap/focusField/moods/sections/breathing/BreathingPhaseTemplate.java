@@ -18,9 +18,5 @@ public class BreathingPhaseTemplate {
 
     private String phase;       // es. "Inspira"
     private String phaseLabel;  // es. "Inspira a fondo"
-    private int duration;       // es. 4 secondi
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mode_id")
-    private BreathingMode breathingMode;
+    private String lang;
 }

@@ -19,7 +19,5 @@ public class BreathingMode {
     private Long id;
 
     private String name; // Es. "Profondamente", "Lentamente"
-
-    @OneToMany(mappedBy = "breathingMode", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BreathingPhaseTemplate> phases;
+    private String lang;
 }
