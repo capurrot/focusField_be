@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface MoodLogRepository extends JpaRepository<MoodLog, Long> {
     List<MoodLog> findByUserId(Long userId);
-    @Query("SELECT new net.infosyscap.focusField.logs.MoodLogCount(l.moodSlug, COUNT(l)) " +
+    @Query("SELECT new net.infosyscap.focusField.logs.MoodLogResponse(l.moodSlug, COUNT(l)) " +
             "FROM MoodLog l GROUP BY l.moodSlug ORDER BY COUNT(l) DESC")
     List<MoodLogResponse> findTopMoodLogs();
 }
