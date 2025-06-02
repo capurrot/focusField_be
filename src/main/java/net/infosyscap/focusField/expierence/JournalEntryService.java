@@ -3,6 +3,8 @@ package net.infosyscap.focusField.expierence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class JournalEntryService {
 
@@ -20,5 +22,8 @@ public class JournalEntryService {
         entry.setLanguage(request.getLanguage());
 
         return repository.save(entry);
+    }
+    public List<JournalEntry> findByLogId(Long logId) {
+        return repository.findByLogId(logId);
     }
 }

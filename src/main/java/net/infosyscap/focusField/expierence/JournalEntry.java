@@ -30,8 +30,6 @@ public class JournalEntry {
     @Column(nullable = false)
     private String type;
 
-    @Lob
-    @Column(nullable = false)
     private String content;
 
     private String moodSlug;
