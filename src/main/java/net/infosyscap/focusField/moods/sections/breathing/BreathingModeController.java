@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/breathing-modes")
+@RequestMapping("/api/focus-field/breathing-modes")
 @RequiredArgsConstructor
 public class BreathingModeController {
 
