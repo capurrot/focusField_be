@@ -1,5 +1,7 @@
 package net.infosyscap.focusField.users;
 
 public enum Role {
-    USER, ADMIN, MOODERS
+    ROLE_USER,
+    ROLE_ADMIN,
+    ROLE_SELLER
 }

@@ -1,5 +1,8 @@
 package net.infosyscap.focusField.auth;
 
+import net.infosyscap.focusField.users.AppUser;
+import net.infosyscap.focusField.users.AppUserService;
+import net.infosyscap.focusField.users.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -23,21 +26,7 @@ public class AuthRunner implements ApplicationRunner {
         // Creazione dell'utente admin se non esiste
         Optional<AppUser> adminUser = appUserService.findByUsername("admin");
         if (adminUser.isEmpty()) {
-            appUserService.registerUser("admin", "adminpwd", Set.of(Role.ROLE_ADMIN));
+            appUserService.registerUser("admin", "adminpwd", "admin@focusfield.com", "Utente", "Amministratore", Set.of(Role.ROLE_ADMIN));
         }
-
-        // Creazione dell'utente user se non esiste
-        Optional<AppUser> normalUser = appUserService.findByUsername("user");
-        if (normalUser.isEmpty()) {
-            appUserService.registerUser("user", "userpwd", Set.of(Role.ROLE_USER));
-        }
-
-        // Creazione dell'utente organizer se non esiste
-        Optional<AppUser> normalSeller = appUserService.findByUsername("organizer");
-        if (normalUser.isEmpty()) {
-            appUserService.registerUser("organizer", "organizerpwd", Set.of(Role.ROLE_ORGANIZER));
-        }
-
-
     }
 }

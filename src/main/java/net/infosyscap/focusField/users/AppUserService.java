@@ -1,0 +1,83 @@
+package net.infosyscap.focusField.users;
+
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import net.infosyscap.focusField.jwt.JwtTokenUtil;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.Set;
+
+@Service
+@RequiredArgsConstructor
+public class AppUserService {
+
+    private final AppUserRepository appUserRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenUtil jwtTokenUtil;
+
+    public AppUser registerUser(String username, String password, String email, String nome, String cognome, Set<Role> roles) {
+        if (appUserRepository.existsByUsername(username)) {
+            throw new EntityExistsException("Username già in uso");
+        }
+
+        AppUser appUser = new AppUser();
+        appUser.setUsername(username);
+        appUser.setPassword(passwordEncoder.encode(password));
+        appUser.setEmail(email);
+        appUser.setNome(nome);
+        appUser.setCognome(cognome);
+        appUser.setRoles(roles);
+
+        return appUserRepository.save(appUser);
+    }
+
+    public Optional<AppUser> findByUsername(String username) {
+        return appUserRepository.findByUsername(username);
+    }
+
+    public AppUser loadUserByUsername(String username) {
+        return appUserRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("Utente non trovato con username: " + username));
+    }
+
+    public String authenticateUser(String username, String password) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(username, password)
+            );
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            return jwtTokenUtil.generateToken(userDetails);
+        } catch (AuthenticationException e) {
+            throw new SecurityException("Credenziali non valide", e);
+        }
+    }
+
+    /**
+     * Trova l'utente tramite email oppure lo crea (usato per login Google).
+     */
+    public AppUser findOrCreateUserByEmail(String email, String nome, String cognome, String pictureUrl, String googleId) {
+        return appUserRepository.findByEmail(email).orElseGet(() -> {
+            AppUser newUser = new AppUser();
+            newUser.setUsername(email); // oppure una strategia unica
+            newUser.setEmail(email);
+            newUser.setNome(nome);
+            newUser.setCognome(cognome);
+            newUser.setPassword(null);
+            newUser.setRoles(Set.of(Role.ROLE_USER));
+            newUser.setGoogleAccount(true);
+            newUser.setGoogleId(googleId);
+            newUser.setPictureUrl(pictureUrl);
+            return appUserRepository.save(newUser);
+        });
+    }
+}
+

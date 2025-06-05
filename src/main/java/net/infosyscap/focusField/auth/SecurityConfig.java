@@ -1,5 +1,8 @@
 package net.infosyscap.focusField.auth;
 
+import net.infosyscap.focusField.jwt.JwtAuthenticationEntryPoint;
+import net.infosyscap.focusField.jwt.JwtRequestFilter;
+import net.infosyscap.focusField.users.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
