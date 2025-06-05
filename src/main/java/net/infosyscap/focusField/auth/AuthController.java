@@ -38,13 +38,10 @@ public class AuthController {
             Set<Role> roles = new HashSet<>();
             roles.add(Role.ROLE_USER);
 
-            // Genera codice di verifica PRIMA di creare l’utente
             String verificationCode = UUID.randomUUID().toString();
 
-            // Costruisci il link di verifica
-            String link = "http://192.168.178.111:8080/api/focus-field/auth/verify-email?code=" + verificationCode;
+            String link = "http://localhost:5174/verify-email?code=" + verificationCode;
 
-            // Prova a inviare l'email PRIMA di creare l’utente
             emailService.sendRegistrationEmail(
                     registerRequest.getEmail(),
                     "Verifica il tuo indirizzo email",
@@ -52,7 +49,6 @@ public class AuthController {
                     link
             );
 
-            // Se email inviata con successo, allora crea l’utente
             AppUser newUser = appUserService.registerUser(
                     registerRequest.getUsername(),
                     registerRequest.getPassword(),

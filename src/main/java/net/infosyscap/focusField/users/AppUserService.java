@@ -68,9 +68,6 @@ public class AppUserService {
         return jwtTokenUtil.generateToken(user);
     }
 
-    /**
-     * Trova l'utente tramite email oppure lo crea (usato per login Google).
-     */
     public AppUser findOrCreateUserByEmail(
             String email,
             String nome,
@@ -81,18 +78,17 @@ public class AppUserService {
     ) {
         return appUserRepository.findByEmail(email).orElseGet(() -> {
             AppUser newUser = new AppUser();
-            newUser.setUsername(email); // o una strategia alternativa
+            newUser.setUsername(email);
             newUser.setEmail(email);
             newUser.setNome(nome);
             newUser.setCognome(cognome);
-            newUser.setPassword(null); // oppure una password dummy se serve
+            newUser.setPassword(null);
             newUser.setRoles(Set.of(Role.ROLE_USER));
-            newUser.setVerified(true); // bypass verifica email
+            newUser.setVerified(true);
             newUser.setProvider(provider);
             newUser.setProviderId(providerId);
             newUser.setPictureUrl(pictureUrl);
 
-            // Flag per Google o Facebook
             if (provider == AuthProvider.GOOGLE) {
                 newUser.setGoogleAccount(true);
             } else if (provider == AuthProvider.FACEBOOK) {

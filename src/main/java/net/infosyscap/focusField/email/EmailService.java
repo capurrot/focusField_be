@@ -34,13 +34,11 @@ public class EmailService {
         helper.setSubject(subject);
         helper.setText(htmlContent, true); // true = HTML
 
-        // Puoi cambiare il mittente o lasciarlo prendere da application.properties
         helper.setFrom("noreply@focusfield.it");
 
         mailSender.send(message);
         System.out.println("Email HTML inviata con successo a " + to);
     }
-
 
     private String loadTemplate(String path) {
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(path)) {
@@ -55,10 +53,9 @@ public class EmailService {
 
     public void sendEmailWithAttachment(String to, String subject, String body, byte[] attachmentBytes, String attachmentName) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
-        // 'true' abilita il supporto multipart per gli allegati
+
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-        // Splitta la stringa "to" usando virgola o punto e virgola come delimitatori
         String[] recipients = to.split("\\s*[,;]\\s*");
         helper.setTo(recipients);
 

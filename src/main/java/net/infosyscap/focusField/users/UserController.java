@@ -50,7 +50,6 @@ public class UserController {
             Map<?, ?> uploadResult = cloudinary.uploader().upload(image.getBytes(), Map.of());
             String imageUrl = (String) uploadResult.get("secure_url");
 
-            // Salva l'URL nel database dell'utente
             userService.updateProfileImage(userDetails.getUsername(), imageUrl);
 
             return ResponseEntity.ok(Map.of("newImageUrl", imageUrl));
