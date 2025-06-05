@@ -40,7 +40,7 @@ public class AuthController {
 
             String verificationCode = UUID.randomUUID().toString();
 
-            String link = "http://localhost:5174/verify-email?code=" + verificationCode;
+            String link = "https://www.focusfield.it/verify-email?code=" + verificationCode;
 
             emailService.sendRegistrationEmail(
                     registerRequest.getEmail(),
