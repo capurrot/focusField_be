@@ -30,6 +30,7 @@ public class JournalEntry {
     @Column(nullable = false)
     private String type;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     private String moodSlug;
