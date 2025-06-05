@@ -48,6 +48,14 @@ public class MoodLogController {
         return moodLogRepository.save(log);
     }
 
+    @PatchMapping("/update/{id}")
+    public MoodLog updateMoodLog(@PathVariable Long id, @RequestBody MoodLogUpdateRequest request) {
+        MoodLog log = moodLogRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Log non trovato"));
+        log.setRating(request.getRating());
+        return moodLogRepository.save(log);
+    }
+
     @GetMapping("/user/logs")
     @PreAuthorize("isAuthenticated()")
     public List<MoodLog> getAuthenticatedUserLogs(Authentication authentication) {

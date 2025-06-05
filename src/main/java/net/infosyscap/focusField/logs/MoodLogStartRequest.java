@@ -7,4 +7,5 @@ public class MoodLogStartRequest {
     private Long userId;
     private String moodSlug;
     private String language;
+
 }
