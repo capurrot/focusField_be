@@ -52,13 +52,9 @@ public class MoodLogController {
     @PreAuthorize("isAuthenticated()")
     public List<MoodLog> getAuthenticatedUserLogs(Authentication authentication) {
         AppUser user = (AppUser) authentication.getPrincipal();
-
-        // Se ha il ruolo ADMIN, restituisci tutti i log
         if (authentication.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ADMIN"))) {
             return moodLogRepository.findAll();
         }
-
-        // Altrimenti restituisci solo i log dell'utente
         return moodLogRepository.findByUserId(user.getId());
     }
 }

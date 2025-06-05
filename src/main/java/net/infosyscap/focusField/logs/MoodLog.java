@@ -24,4 +24,5 @@ public class MoodLog {
     private LocalDateTime endTime;
     private Integer durationSeconds;
     private Boolean completed;
+    private Integer rating;
 }
