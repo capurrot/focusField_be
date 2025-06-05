@@ -1,7 +1,8 @@
-package net.infosyscap.focusField.moods;
+package net.infosyscap.focusField.moods.list;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +15,8 @@ import java.util.List;
 @Table(name = "mood_list")
 public class MoodList {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mood_list_seq")
+    @SequenceGenerator(name = "mood_list_seq", sequenceName = "mood_list_id_seq", allocationSize = 1)
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -37,5 +39,4 @@ public class MoodList {
 
     @Column(nullable = false)
     private String icon;
-
 }

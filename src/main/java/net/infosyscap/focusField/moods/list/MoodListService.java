@@ -1,4 +1,4 @@
-package net.infosyscap.focusField.moods;
+package net.infosyscap.focusField.moods.list;
 
 import net.infosyscap.focusField.commons.CommonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,8 @@ import java.util.Optional;
 
 @Service
 public class MoodListService {
-    @Autowired MoodListRepository moodListRepository;
+    @Autowired
+    MoodListRepository moodListRepository;
 
     public List<MoodListDto> findAllMoodDtos() {
         return moodListRepository.findAllByOrderByIdAsc()
@@ -57,21 +58,47 @@ public class MoodListService {
 
 
     public CommonResponse saveMood(MoodList mood) {
-        moodListRepository.save(mood);
-        return new CommonResponse(moodListRepository.save(mood).getId());
+        if (mood.getTag() != null) {
+            mood.getTag().forEach(tag -> tag.setMood(mood));
+        }
+
+        if (mood.getColors() != null) {
+            mood.getColors().forEach(color -> color.setMood(mood));
+        }
+
+        MoodList saved = moodListRepository.save(mood);
+        return new CommonResponse(saved.getId());
     }
 
     public MoodList updateMood(Long id, MoodList mood) {
         Optional<MoodList> moodList = moodListRepository.findById(id);
         if (moodList.isPresent()) {
             MoodList existingMood = moodList.get();
+
             existingMood.setSlug(mood.getSlug());
             existingMood.setImage(mood.getImage());
             existingMood.setBackground(mood.getBackground());
-            existingMood.setTag(mood.getTag());
-            existingMood.setColors(mood.getColors());
             existingMood.setOpacity(mood.getOpacity());
             existingMood.setIcon(mood.getIcon());
+
+
+            existingMood.getTag().clear();
+            if (mood.getTag() != null) {
+                for (MoodTags tag : mood.getTag()) {
+                    tag.setMood(existingMood);
+                    existingMood.getTag().add(tag);
+                }
+            }
+
+
+            existingMood.getColors().clear();
+            if (mood.getColors() != null) {
+                for (MoodColors color : mood.getColors()) {
+                    color.setMood(existingMood);
+                    existingMood.getColors().add(color);
+                }
+            }
+
             return moodListRepository.save(existingMood);
         } else {
             return null;

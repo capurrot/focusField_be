@@ -20,7 +20,8 @@ import java.util.stream.Collectors;
 public class AppUser implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+    @SequenceGenerator(name = "user_seq", sequenceName = "user_id_seq", allocationSize = 1)
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -52,8 +53,20 @@ public class AppUser implements UserDetails {
     @Column(nullable = false)
     private boolean googleAccount = false;
 
+    @Column(nullable = false)
+    private boolean facebookAccount = false;
+
     private String googleId;
     private String pictureUrl;
+
+    private String verificationCode;
+    private boolean verified;
+
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
+
+    private String providerId;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

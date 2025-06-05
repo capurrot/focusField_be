@@ -1,4 +1,4 @@
-package net.infosyscap.focusField.moods;
+package net.infosyscap.focusField.moods.list;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

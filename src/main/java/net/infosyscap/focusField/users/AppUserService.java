@@ -5,16 +5,14 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import net.infosyscap.focusField.jwt.JwtTokenUtil;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.Set;
-
 @Service
 @RequiredArgsConstructor
 public class AppUserService {
@@ -40,6 +38,15 @@ public class AppUserService {
         return appUserRepository.save(appUser);
     }
 
+    public void saveVerificationCode(String email, String code) {
+        AppUser user = appUserRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Utente non trovato"));
+        user.setVerificationCode(code);
+        user.setVerified(false);
+        appUserRepository.save(user);
+    }
+
+
     public Optional<AppUser> findByUsername(String username) {
         return appUserRepository.findByUsername(username);
     }
@@ -50,34 +57,47 @@ public class AppUserService {
     }
 
     public String authenticateUser(String username, String password) {
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, password)
-            );
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            return jwtTokenUtil.generateToken(userDetails);
-        } catch (AuthenticationException e) {
-            throw new SecurityException("Credenziali non valide", e);
+        AppUser user = appUserRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Utente non trovato"));
+
+        if (!user.isVerified()) {
+            throw new DisabledException("Email non verificata. Controlla la tua casella di posta.");
         }
+
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        return jwtTokenUtil.generateToken(user);
     }
 
-    /**
-     * Trova l'utente tramite email oppure lo crea (usato per login Google).
-     */
-    public AppUser findOrCreateUserByEmail(String email, String nome, String cognome, String pictureUrl, String googleId) {
+    public AppUser findOrCreateUserByEmail(
+            String email,
+            String nome,
+            String cognome,
+            String pictureUrl,
+            String providerId,
+            AuthProvider provider
+    ) {
         return appUserRepository.findByEmail(email).orElseGet(() -> {
             AppUser newUser = new AppUser();
-            newUser.setUsername(email); // oppure una strategia unica
+            newUser.setUsername(email);
             newUser.setEmail(email);
             newUser.setNome(nome);
             newUser.setCognome(cognome);
             newUser.setPassword(null);
             newUser.setRoles(Set.of(Role.ROLE_USER));
-            newUser.setGoogleAccount(true);
-            newUser.setGoogleId(googleId);
+            newUser.setVerified(true);
+            newUser.setProvider(provider);
+            newUser.setProviderId(providerId);
             newUser.setPictureUrl(pictureUrl);
+
+            if (provider == AuthProvider.GOOGLE) {
+                newUser.setGoogleAccount(true);
+            } else if (provider == AuthProvider.FACEBOOK) {
+                newUser.setFacebookAccount(true);
+            }
+
             return appUserRepository.save(newUser);
         });
     }
+
 }
 

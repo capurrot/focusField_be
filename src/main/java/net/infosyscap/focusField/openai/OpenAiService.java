@@ -1,7 +1,7 @@
 package net.infosyscap.focusField.openai;
 
-import net.infosyscap.focusField.moods.MoodList;
-import net.infosyscap.focusField.moods.MoodListRepository;
+import net.infosyscap.focusField.moods.list.MoodList;
+import net.infosyscap.focusField.moods.list.MoodListRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;

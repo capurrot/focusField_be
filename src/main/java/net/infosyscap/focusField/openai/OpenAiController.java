@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/openai")
+@RequestMapping("/api/focus-field/openai")
 public class OpenAiController {
 
     private final OpenAiService openAiService;
